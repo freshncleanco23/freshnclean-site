@@ -86,68 +86,53 @@
     </header>
 
     <main id="top">
-      <!-- ============ HERO ============ -->
-      <section class="hero">
-        <div class="hero-bg" aria-hidden="true">
-          <div class="hero-blob hero-blob-1"></div>
-          <div class="hero-blob hero-blob-2"></div>
-          <div class="hero-grain"></div>
+      <!-- ============ HERO (cinematic) ============ -->
+      <section class="hero hero-cinematic">
+        <div class="hero-image" aria-hidden="true">
+          <img src="images/hero-cinematic.jpg" alt="" />
+          <div class="hero-image-scrim"></div>
         </div>
         <div class="container hero-inner">
-          <div class="hero-copy">
+          <div class="hero-copy reveal">
             <span class="eyebrow">
               <span class="eyebrow-dot"></span>
               Locally owned · Roswell, GA
             </span>
             <h1 class="hero-title">
-              A spotless home,<br />
-              <em>without the stress.</em>
+              A spotless home.<br />
+              <em>Effortlessly.</em>
             </h1>
             <p class="hero-lede">
-              Fresh N Clean delivers careful, reliable cleaning across North Georgia and the
-              greater Metro Atlanta area — from weekly maintenance to move-in deep cleans and
-              post-construction polish.
+              Premium residential &amp; commercial cleaning across North Georgia
+              and Metro Atlanta.
             </p>
             <div class="hero-cta">
-              <a href="#calculator" class="btn btn-primary btn-lg">Get an Instant Quote</a>
-              <a href="#services" class="btn btn-ghost btn-lg">See Services →</a>
+              <a href="#calculator" class="btn btn-primary btn-lg">Get an instant quote</a>
+              <a href="#services" class="btn btn-ghost btn-lg">Explore services →</a>
             </div>
-            <ul class="hero-trust" role="list">
-              <li><strong>9+</strong><span>5★ reviews</span></li>
-              <li><strong>14</strong><span>Cities served</span></li>
-              <li><strong>100%</strong><span>Detail-obsessed</span></li>
-            </ul>
           </div>
+        </div>
+        <a href="#services" class="hero-scroll-cue" aria-label="Scroll to services">
+          <span></span>
+        </a>
+      </section>
 
-          <div class="hero-card">
-            <div class="hero-card-inner">
-              <div class="hero-card-header">
-                <span class="badge">Most booked</span>
-                <h3>Recurring Maintenance</h3>
-              </div>
-              <p class="hero-card-desc">
-                Weekly, biweekly, or monthly visits that keep your home effortlessly clean — same
-                trusted team every time.
-              </p>
-              <ul class="check-list" role="list">
-                <li>Kitchens &amp; bathrooms detailed</li>
-                <li>Floors vacuumed &amp; mopped</li>
-                <li>Dusting, surfaces, and touch points</li>
-                <li>Custom checklist for your home</li>
-              </ul>
-              <div class="hero-card-foot">
-                <span class="price-from">From <strong>$150</strong> / visit</span>
-                <a href="#calculator" class="link-arrow">Estimate yours →</a>
-              </div>
-            </div>
-          </div>
+      <!-- ============ MARQUEE STATS ============ -->
+      <section class="section section-stats reveal">
+        <div class="container">
+          <ul class="stats-grid" role="list">
+            <li><strong>9+</strong><span>5★ reviews</span></li>
+            <li><strong>14</strong><span>Cities served</span></li>
+            <li><strong>2023</strong><span>Locally founded</span></li>
+            <li><strong>100%</strong><span>Detail-obsessed</span></li>
+          </ul>
         </div>
       </section>
 
       <!-- ============ SERVICES ============ -->
       <section class="section" id="services">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <span class="section-kicker">What we do</span>
             <h2 class="section-title">Cleaning, done with care.</h2>
             <p class="section-lede">
@@ -155,8 +140,18 @@
             </p>
           </div>
 
-          <div class="service-grid">
-            <article class="service-card">
+          <div class="chip-row reveal" role="tablist" aria-label="Filter services">
+            <button class="chip is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+            <button class="chip" data-filter="residential" role="tab" aria-selected="false">Residential</button>
+            <button class="chip" data-filter="commercial" role="tab" aria-selected="false">Commercial</button>
+            <button class="chip" data-filter="deep" role="tab" aria-selected="false">Deep Clean</button>
+            <button class="chip" data-filter="move" role="tab" aria-selected="false">Move In / Out</button>
+            <button class="chip" data-filter="post" role="tab" aria-selected="false">Post-Construction</button>
+            <button class="chip" data-filter="organize" role="tab" aria-selected="false">Organizing</button>
+          </div>
+
+          <div class="service-grid reveal" id="serviceGrid">
+            <article class="service-card" data-category="residential">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
               </div>
@@ -165,7 +160,7 @@
               <span class="service-min">From $150</span>
             </article>
 
-            <article class="service-card">
+            <article class="service-card" data-category="commercial">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
               </div>
@@ -174,7 +169,7 @@
               <span class="service-min">From $150</span>
             </article>
 
-            <article class="service-card featured">
+            <article class="service-card featured" data-category="deep residential">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l2.4 6.4L21 9.6l-5 4.4L17.6 21 12 17.6 6.4 21 8 14l-5-4.4 6.6-1.2z"/></svg>
               </div>
@@ -183,7 +178,7 @@
               <span class="service-min">From $325</span>
             </article>
 
-            <article class="service-card">
+            <article class="service-card" data-category="move residential">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 7h13l5 5v9H3zM3 7V3h13v4M16 12h5"/></svg>
               </div>
@@ -192,7 +187,7 @@
               <span class="service-min">From $400</span>
             </article>
 
-            <article class="service-card">
+            <article class="service-card" data-category="post commercial residential">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 20l4-12 4 4 4-8 6 16"/></svg>
               </div>
@@ -201,7 +196,7 @@
               <span class="service-min">From $500</span>
             </article>
 
-            <article class="service-card">
+            <article class="service-card" data-category="organize residential commercial">
               <div class="service-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/></svg>
               </div>
@@ -216,7 +211,7 @@
       <!-- ============ PRICING SCALE ============ -->
       <section class="section section-alt" id="pricing">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <span class="section-kicker">Transparent pricing</span>
             <h2 class="section-title">A clear price, every time.</h2>
             <p class="section-lede">
@@ -225,7 +220,7 @@
             </p>
           </div>
 
-          <div class="pricing-table" role="table" aria-label="Pricing scale per square foot">
+          <div class="pricing-table reveal" role="table" aria-label="Pricing scale per square foot">
             <div class="pricing-row pricing-head" role="row">
               <span role="columnheader">Service type</span>
               <span role="columnheader">Rate</span>
@@ -278,7 +273,7 @@
       <!-- ============ CALCULATOR ============ -->
       <section class="section" id="calculator">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <span class="section-kicker">Instant quote</span>
             <h2 class="section-title">Estimate your clean in 10 seconds.</h2>
             <p class="section-lede">
@@ -287,7 +282,7 @@
             </p>
           </div>
 
-          <div class="calculator">
+          <div class="calculator reveal">
             <div class="calc-controls">
               <fieldset class="field">
                 <legend>Service type</legend>
@@ -345,7 +340,7 @@
       <!-- ============ TESTIMONIALS ============ -->
       <section class="section section-alt" id="testimonials">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <span class="section-kicker">From our clients</span>
             <h2 class="section-title">Kind words, real homes.</h2>
             <p class="section-lede">
@@ -353,8 +348,16 @@
             </p>
           </div>
 
-          <div class="testimonial-grid">
-            <figure class="testimonial featured-quote">
+          <div class="chip-row reveal" role="tablist" aria-label="Filter reviews">
+            <button class="chip is-active" data-review-filter="all" role="tab" aria-selected="true">All reviews</button>
+            <button class="chip" data-review-filter="featured" role="tab" aria-selected="false">★ Featured</button>
+            <button class="chip" data-review-filter="deep" role="tab" aria-selected="false">Deep cleans</button>
+            <button class="chip" data-review-filter="recurring" role="tab" aria-selected="false">Recurring</button>
+            <button class="chip" data-review-filter="move" role="tab" aria-selected="false">Move in/out</button>
+          </div>
+
+          <div class="testimonial-grid reveal" id="testimonialGrid">
+            <figure class="testimonial featured-quote" data-tags="featured deep">
               <svg class="quote-mark" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><path d="M10 8c-4 2-7 6-7 12v4h8v-8H6c0-3 2-6 5-7zm14 0c-4 2-7 6-7 12v4h8v-8h-5c0-3 2-6 5-7z"/></svg>
               <blockquote>
                 Everything was spotless, fresh, and cared for in a way that's hard to find these
@@ -365,7 +368,7 @@
               <figcaption>— Dasia S.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="move deep">
               <blockquote>
                 Thanks so much for the clean up and helping me with preparing for out of town
                 guests. Your attention to detail is next level and I love your work. Thank goodness
@@ -374,14 +377,14 @@
               <figcaption>— Tracey W.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="recurring move">
               <blockquote>
                 Love you!! You're the best! We're taking you with us when we move.
               </blockquote>
               <figcaption>— Brittany N.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="deep featured">
               <blockquote>
                 We just got home and you're right, it looks amazing!!! And I'm a pretty tough
                 critic. Haha. Thank you so much.
@@ -389,7 +392,7 @@
               <figcaption>— Anna R.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="deep recurring">
               <blockquote>
                 Everything looks so nice and yay for the super clean kitchen! The cabinets look
                 amazing! Thank you!!!
@@ -397,14 +400,14 @@
               <figcaption>— Jamie S.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="deep">
               <blockquote>
                 The house looks beautiful!! Thank you guys so much.
               </blockquote>
               <figcaption>— Courtney B.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="recurring featured">
               <blockquote>
                 Thank you for today. The house looks great. So happy to have you in our village
                 girlfriend.
@@ -412,14 +415,14 @@
               <figcaption>— Liz M.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="deep">
               <blockquote>
                 It looks AMAZING — thank you so much!!!
               </blockquote>
               <figcaption>— Erin R.</figcaption>
             </figure>
 
-            <figure class="testimonial">
+            <figure class="testimonial" data-tags="recurring">
               <blockquote>
                 Thank you so much for all you do! I appreciate you so much!
               </blockquote>
@@ -431,7 +434,7 @@
 
       <!-- ============ ABOUT ============ -->
       <section class="section" id="about">
-        <div class="container about-grid">
+        <div class="container about-grid reveal">
           <div class="about-image">
             <div class="about-photo">
               <img src="images/co-owners-kitchen.jpg" alt="Camryn (left) and Alex (right), co-owners of Fresh N Clean, standing back-to-back in a bright kitchen with spray bottles and green cleaning gloves." loading="lazy" decoding="async" />
@@ -466,7 +469,7 @@
       <!-- ============ AREAS ============ -->
       <section class="section section-alt" id="areas">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <span class="section-kicker">Service area</span>
             <h2 class="section-title">North Georgia &amp; Metro Atlanta.</h2>
             <p class="section-lede">
@@ -474,7 +477,7 @@
               list? Reach out — we may still be able to help.
             </p>
           </div>
-          <ul class="area-grid" role="list">
+          <ul class="area-grid reveal" role="list">
             <li>Cartersville</li>
             <li>Acworth</li>
             <li>Kennesaw</li>
@@ -496,7 +499,7 @@
       <!-- ============ CONTACT ============ -->
       <section class="section contact-section" id="contact">
         <div class="container">
-          <div class="contact-grid">
+          <div class="contact-grid reveal">
             <div class="contact-copy">
               <span class="section-kicker">Get in touch</span>
               <h2 class="section-title">Ready for a fresh start?</h2>

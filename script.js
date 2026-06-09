@@ -147,6 +147,76 @@
       window.location.href = mailto;
     });
 
+  /* ---------- service filter chips (YouTube-style) ---------- */
+  const serviceChipRow = document.querySelector('#services .chip-row');
+  const serviceCards = document.querySelectorAll('#serviceGrid .service-card');
+  if (serviceChipRow && serviceCards.length) {
+    const chips = serviceChipRow.querySelectorAll('.chip[data-filter]');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => {
+          c.classList.remove('is-active');
+          c.setAttribute('aria-selected', 'false');
+        });
+        chip.classList.add('is-active');
+        chip.setAttribute('aria-selected', 'true');
+        const filter = chip.dataset.filter;
+        serviceCards.forEach((card) => {
+          const categories = (card.dataset.category || '').split(/\s+/);
+          const show = filter === 'all' || categories.includes(filter);
+          card.classList.toggle('is-hidden', !show);
+        });
+      });
+    });
+  }
+
+  /* ---------- review filter chips ---------- */
+  const reviewChipRow = document.querySelector('#testimonials .chip-row');
+  const reviewCards = document.querySelectorAll('#testimonialGrid .testimonial');
+  if (reviewChipRow && reviewCards.length) {
+    const chips = reviewChipRow.querySelectorAll('.chip[data-review-filter]');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => {
+          c.classList.remove('is-active');
+          c.setAttribute('aria-selected', 'false');
+        });
+        chip.classList.add('is-active');
+        chip.setAttribute('aria-selected', 'true');
+        const filter = chip.dataset.reviewFilter;
+        reviewCards.forEach((card) => {
+          const tags = (card.dataset.tags || '').split(/\s+/);
+          const show = filter === 'all' || tags.includes(filter);
+          card.classList.toggle('is-hidden', !show);
+        });
+      });
+    });
+  }
+
+  /* ---------- scroll-reveal (IntersectionObserver) ---------- */
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length && 'IntersectionObserver' in window) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      revealEls.forEach((el) => el.classList.add('is-visible'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' },
+      );
+      revealEls.forEach((el) => io.observe(el));
+    }
+  } else {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  }
+
   /* ---------- footer year ---------- */
   const yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
