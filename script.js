@@ -315,41 +315,59 @@
   const projectChipRow = document.querySelector('#projects .chip-row');
 
   const projectData = {
-    'living-room-1': {
+    'kitchen-1': {
+      title: 'Full kitchen reset',
+      caption: 'Counters cleared, surfaces degreased, sink scrubbed, floors mopped \u2014 top to bottom in one visit.',
+      beforeAlt: 'Before: cluttered, dirty kitchen with dishes and food across the counters.',
+      afterAlt: 'After: clean, organized kitchen with clear counters and polished surfaces.',
+    },
+    'sink-1': {
+      title: 'Kitchen sink restoration',
+      caption: 'Stains and buildup lifted from a deep porcelain basin \u2014 back to a bright, hygienic white.',
+      beforeAlt: 'Before: discolored, stained porcelain kitchen sink.',
+      afterAlt: 'After: bright, spotless porcelain kitchen sink.',
+    },
+    'oven-1': {
+      title: 'Oven deep clean',
+      caption: 'Burnt-on grease and oven-door film cut down \u2014 racks scrubbed, glass cleared, interior wiped.',
+      beforeAlt: 'Before: oven interior with burnt residue and a clouded glass door.',
+      afterAlt: 'After: clean oven racks and a clear, see-through glass door.',
+    },
+    'oven-2': {
+      title: 'Stovetop &amp; oven detail',
+      caption: 'Glass cooktop polished, oven interior degreased, door clarified \u2014 a full range refresh.',
+      beforeAlt: 'Before: stovetop covered in burnt-on residue with a dirty oven interior.',
+      afterAlt: 'After: streak-free glass cooktop and a clean, fresh oven interior.',
+    },
+    'shower-1': {
+      title: 'Shower &amp; glass restoration',
+      caption: 'Hard-water film, soap scum, and mineral spots cleared from glass, tile, and stone.',
+      beforeAlt: 'Before: shower glass clouded with hard-water spots and soap scum.',
+      afterAlt: 'After: crystal-clear shower glass with bright marble tile.',
+    },
+    'toilet-1': {
+      title: 'Family bath toilet detail',
+      caption: 'Bowl, seat, base, and surrounding floor sanitized \u2014 safe for kids and ready for guests.',
+      beforeAlt: 'Before: family bathroom toilet with stained bowl and dust around the base.',
+      afterAlt: 'After: spotless white toilet, sanitized seat, clean surrounding floor.',
+    },
+    'toilet-2': {
+      title: 'Powder room reset',
+      caption: 'Rust and water-line stains lifted from the bowl, exterior polished, hardwood wiped down.',
+      beforeAlt: 'Before: powder-room toilet bowl with rust and water-line staining.',
+      afterAlt: 'After: bright, fully cleaned powder-room toilet on hardwood floor.',
+    },
+    'laundry-1': {
+      title: 'Laundry room rescue',
+      caption: 'Piles of clothes sorted, washed, and folded into baskets \u2014 floors cleared and ready for life again.',
+      beforeAlt: 'Before: laundry piled across the floor in a dimly lit room.',
+      afterAlt: 'After: clothes folded into neatly arranged baskets on a clean carpet.',
+    },
+    'playroom-1': {
       title: 'Playroom reset',
-      caption: 'Deep clean &amp; declutter \u2014 toys cleared, carpet vacuumed, rug returned to a calm, livable space.',
-      beforeAlt: 'Before: cluttered playroom with scattered toys.',
-      afterAlt: 'After: tidy living room with rug, organized toys, vacuumed carpet.',
-    },
-    'bathroom-1': {
-      title: 'Guest bath refresh',
-      caption: 'Top-to-bottom bathroom clean \u2014 mirror, vanity, fixtures, floor. Spot-free and move-in ready.',
-      beforeAlt: 'Before: dusty bathroom vanity and smudged mirror.',
-      afterAlt: 'After: gleaming bathroom vanity, polished fixtures, streak-free mirror.',
-    },
-    'bathroom-2': {
-      title: 'Shower restoration',
-      caption: 'Soap-scum lift and grout brightening \u2014 tile and glass restored without harsh chemicals.',
-      beforeAlt: 'Before: shower with soap scum and dull grout.',
-      afterAlt: 'After: bright clean shower tile, clear glass, fresh grout.',
-    },
-    'cabinet-1': {
-      title: 'Vanity cabinet detail',
-      caption: 'Under-sink reset \u2014 wiped down, refreshed, and organized so the space actually works again.',
-      beforeAlt: 'Before: cluttered, dirty under-sink bathroom cabinet.',
-      afterAlt: 'After: clean, neatly organized under-sink storage.',
-    },
-    'cabinet-2': {
-      title: 'Storage cabinet declutter',
-      caption: 'Deep wipe-down plus sort-and-organize \u2014 cleaning supplies tidied, surfaces sanitized.',
-      beforeAlt: 'Before: disorganized storage cabinet with scattered supplies.',
-      afterAlt: 'After: organized storage cabinet, supplies neatly arranged.',
-    },
-    'blinds': {
-      title: 'Window blinds detail',
-      caption: 'Blade-by-blade dusting and wipe \u2014 from gray and grimy back to bright white in one visit.',
-      beforeAlt: 'Before: dusty, dirty window blinds.',
-      afterAlt: 'After: bright white, spotless window blinds.',
+      caption: 'Toys cleared, carpet vacuumed, rug straightened \u2014 back to a calm, livable family space.',
+      beforeAlt: 'Before: playroom carpet with scattered toys and a crumpled rug.',
+      afterAlt: 'After: tidy playroom with rug straightened and carpet freshly vacuumed.',
     },
   };
 
