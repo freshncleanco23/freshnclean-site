@@ -535,4 +535,58 @@
   /* ---------- footer year ---------- */
   const yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---------- hash re-scroll after lazy images load ----------
+     Lazy-loaded images above the contact form push it down after the
+     initial hash scroll. Repeat scroll until target is stable. */
+  function scrollToHash() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    const el = document.querySelector(hash);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
+  function settleScrollToHash() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    // Header is ~76px tall; aim for 96px buffer so the heading isn't cramped.
+    const HEADER_OFFSET = 96;
+    // Temporarily disable smooth scroll so our settle loop converges.
+    const docEl = document.documentElement;
+    const prevBehavior = docEl.style.scrollBehavior;
+    docEl.style.scrollBehavior = 'auto';
+    let last = -1;
+    let stableCount = 0;
+    let tries = 0;
+    const tick = () => {
+      const el = document.querySelector(hash);
+      if (!el) {
+        docEl.style.scrollBehavior = prevBehavior;
+        return;
+      }
+      const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+      if (Math.abs(top - last) < 1) {
+        stableCount++;
+      } else {
+        stableCount = 0;
+      }
+      last = top;
+      window.scrollTo(0, top);
+      tries++;
+      if (stableCount < 3 && tries < 25) {
+        setTimeout(tick, 150);
+      } else {
+        // Restore smooth scroll after settling.
+        docEl.style.scrollBehavior = prevBehavior;
+      }
+    };
+    tick();
+  }
+  if (window.location.hash) {
+    window.addEventListener('load', settleScrollToHash);
+  }
+  // Re-scroll when the hash changes (clicking Book a Clean while on page)
+  window.addEventListener('hashchange', () => {
+    setTimeout(settleScrollToHash, 50);
+  });
 })();
