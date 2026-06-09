@@ -332,11 +332,9 @@ select {
   color: var(--color-text);
   letter-spacing: -0.01em;
 }
-.logo-name em {
-  font-style: italic;
+.logo-n {
   color: var(--color-primary);
-  font-weight: 500;
-  padding: 0 0.15em;
+  font-weight: 600;
 }
 .logo-tag {
   font-size: 11px;
