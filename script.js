@@ -245,7 +245,7 @@
     '.testimonial-grid',
     '.pricing-table',
     '.stats-grid',
-    '.areas-grid',
+    '.area-grid',
   ];
   gridSelectors.forEach((sel) => {
     document.querySelectorAll(sel).forEach((grid) => {
