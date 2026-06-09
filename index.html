@@ -56,11 +56,11 @@
 
         <nav class="nav" aria-label="Primary">
           <a href="#services">Services</a>
+          <a href="#projects">Projects</a>
           <a href="#pricing">Pricing</a>
           <a href="#calculator">Quote</a>
           <a href="#testimonials">Reviews</a>
           <a href="#about">About</a>
-          <a href="#areas">Areas</a>
         </nav>
 
         <div class="header-actions">
@@ -76,6 +76,7 @@
       </div>
       <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
         <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
         <a href="#pricing">Pricing</a>
         <a href="#calculator">Quote</a>
         <a href="#testimonials">Reviews</a>
@@ -204,6 +205,47 @@
               <p>Closets, pantries, garages, or an extra pair of hands. $50/hr, 3-hour minimum.</p>
               <span class="service-min">From $150</span>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ BEFORE / AFTER ============ -->
+      <section class="section section-projects" id="projects">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="section-kicker">Real projects · Real homes</span>
+            <h2 class="section-title">Before &amp; After.</h2>
+            <p class="section-lede">
+              Drag the slider to see the transformation. Every photo is a real Fresh N Clean job —
+              no stock, no AI.
+            </p>
+          </div>
+
+          <div class="chip-row reveal" role="tablist" aria-label="Filter projects">
+            <button class="chip is-active" data-project="living-room-1" role="tab" aria-selected="true">Living room</button>
+            <button class="chip" data-project="bathroom-1" role="tab" aria-selected="false">Bathroom</button>
+            <button class="chip" data-project="bathroom-2" role="tab" aria-selected="false">Shower</button>
+            <button class="chip" data-project="cabinet-1" role="tab" aria-selected="false">Cabinet · Bath</button>
+            <button class="chip" data-project="cabinet-2" role="tab" aria-selected="false">Cabinet · Storage</button>
+            <button class="chip" data-project="blinds" role="tab" aria-selected="false">Blinds</button>
+          </div>
+
+          <div class="ba-stage reveal" id="baStage">
+            <figure class="ba-compare" id="baCompare" role="img" aria-label="Before and after comparison — drag to reveal">
+              <img class="ba-img ba-after" id="baAfter" src="images/projects/living-room-1-after.jpg" alt="After Fresh N Clean cleaning — clean, tidy room." />
+              <img class="ba-img ba-before" id="baBefore" src="images/projects/living-room-1-before.jpg" alt="Before Fresh N Clean cleaning — cluttered, messy room." />
+              <button class="ba-handle" id="baHandle" type="button" aria-label="Drag to compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" role="slider">
+                <span class="ba-handle-line" aria-hidden="true"></span>
+                <span class="ba-handle-knob" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+                </span>
+              </button>
+              <span class="ba-label ba-label-before" aria-hidden="true">Before</span>
+              <span class="ba-label ba-label-after" aria-hidden="true">After</span>
+            </figure>
+            <figcaption class="ba-caption" id="baCaption">
+              <strong>Playroom reset</strong> · Deep clean &amp; declutter — toys cleared, carpet vacuumed, rug returned. Roswell, GA.
+            </figcaption>
           </div>
         </div>
       </section>

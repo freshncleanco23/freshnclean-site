@@ -234,6 +234,8 @@ select {
 .section-title {
   font-size: var(--text-2xl);
   margin-bottom: var(--space-4);
+  letter-spacing: -0.028em;
+  font-feature-settings: 'ss01', 'ss02';
 }
 .section-lede {
   font-size: var(--text-lg);
@@ -1468,6 +1470,9 @@ input[type='range']::-moz-range-thumb {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* Parallax: JS sets --hero-y based on scroll position. */
+  transform: translate3d(0, var(--hero-y, 0px), 0);
+  will-change: transform;
 }
 .hero-cinematic .hero-image img {
   width: 100%;
@@ -1475,8 +1480,28 @@ input[type='range']::-moz-range-thumb {
   object-fit: cover;
   object-position: center 30%;
   display: block;
-  transform: scale(1.04);
   filter: saturate(1.04);
+  /* Ken Burns slow zoom + drift. */
+  animation: heroKenBurns 22s ease-in-out infinite alternate;
+  will-change: transform;
+  transform-origin: center 30%;
+}
+@keyframes heroKenBurns {
+  0% {
+    transform: translate3d(-0.6%, 0, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(0.6%, 0, 0) scale(1.10);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cinematic .hero-image {
+    transform: none;
+  }
+  .hero-cinematic .hero-image img {
+    animation: none;
+    transform: scale(1.04);
+  }
 }
 .hero-cinematic .hero-image-scrim {
   position: absolute;
@@ -1672,6 +1697,191 @@ input[type='range']::-moz-range-thumb {
 }
 
 /* =========================================================
+   Before / After section
+   ========================================================= */
+.section-projects {
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-divider);
+}
+#projects .chip-row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--space-2) 0 var(--space-6);
+  margin-bottom: var(--space-6);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+#projects .chip-row::-webkit-scrollbar { display: none; }
+#projects .chip-row .chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  padding: 0.55rem 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-interactive),
+    color var(--transition-interactive),
+    border-color var(--transition-interactive);
+}
+#projects .chip-row .chip:hover {
+  background: var(--color-surface-offset);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+#projects .chip-row .chip.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.ba-stage {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.ba-compare {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #0d1a14;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  user-select: none;
+  touch-action: none;
+  isolation: isolate;
+}
+.ba-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+/* The BEFORE image sits absolutely positioned at full figure size, then we
+   reveal a left strip of it using clip-path. This keeps the image undistorted
+   regardless of slider position. --ba-pos is a 0–100 percentage. */
+.ba-before {
+  z-index: 2;
+  clip-path: inset(0 calc(100% - var(--ba-pos, 50%)) 0 0);
+  -webkit-clip-path: inset(0 calc(100% - var(--ba-pos, 50%)) 0 0);
+  will-change: clip-path;
+}
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ba-pos, 50%);
+  z-index: 3;
+  width: 56px;
+  margin-left: -28px;
+  background: transparent;
+  border: 0;
+  cursor: ew-resize;
+  padding: 0;
+  color: var(--color-primary);
+  touch-action: none;
+  will-change: left;
+}
+.ba-handle:focus-visible {
+  outline: none;
+}
+.ba-handle:focus-visible .ba-handle-knob {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 40%, transparent),
+    0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.ba-handle-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  margin-left: -1.5px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.ba-handle-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-interactive);
+}
+.ba-handle:hover .ba-handle-knob,
+.ba-handle:active .ba-handle-knob {
+  transform: scale(1.08);
+}
+.ba-label {
+  position: absolute;
+  top: var(--space-4);
+  z-index: 4;
+  padding: 0.35rem 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(13, 26, 20, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+}
+.ba-label-before { left: var(--space-4); }
+.ba-label-after  { right: var(--space-4); }
+.ba-caption {
+  margin-top: var(--space-5);
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+.ba-caption strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Crossfade when swapping projects */
+.ba-compare.is-swapping .ba-img {
+  opacity: 0.35;
+  transition: opacity 180ms ease;
+}
+.ba-img {
+  transition: opacity 240ms ease;
+}
+
+@media (max-width: 720px) {
+  .ba-compare {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+  }
+  .ba-handle-knob {
+    width: 42px;
+    height: 42px;
+    margin: -21px 0 0 -21px;
+  }
+  .ba-label {
+    top: var(--space-3);
+    font-size: 0.7rem;
+  }
+  .ba-label-before { left: var(--space-3); }
+  .ba-label-after  { right: var(--space-3); }
+}
+
+/* =========================================================
    Scroll-reveal animations (IntersectionObserver)
    ========================================================= */
 .reveal {
@@ -1689,6 +1899,29 @@ input[type='range']::-moz-range-thumb {
 .reveal[data-reveal-delay='1'] { transition-delay: 80ms; }
 .reveal[data-reveal-delay='2'] { transition-delay: 160ms; }
 .reveal[data-reveal-delay='3'] { transition-delay: 240ms; }
+
+/* Stagger reveals for children of a .reveal grid. JS assigns --reveal-delay
+   per child; the child's transition fires when the parent gains .is-visible. */
+.reveal-child {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible .reveal-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-child {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* Hero copy reveals from left, not up */
 .hero-cinematic .hero-copy.reveal {

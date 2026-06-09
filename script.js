@@ -217,6 +217,204 @@
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
+  /* ---------- hero parallax (subtle) ---------- */
+  const heroImage = document.querySelector('.hero-cinematic .hero-image');
+  if (heroImage) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      let ticking = false;
+      const onHeroScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          // Move the hero image at ~25% of scroll speed, capped so it never
+          // visibly tears below the section bottom.
+          const y = Math.min(window.scrollY * 0.25, 180);
+          heroImage.style.setProperty('--hero-y', y + 'px');
+          ticking = false;
+        });
+      };
+      window.addEventListener('scroll', onHeroScroll, { passive: true });
+      onHeroScroll();
+    }
+  }
+
+  /* ---------- stagger reveal delays for grids ---------- */
+  const gridSelectors = [
+    '.service-grid',
+    '.testimonial-grid',
+    '.pricing-table',
+    '.stats-grid',
+    '.areas-grid',
+  ];
+  gridSelectors.forEach((sel) => {
+    document.querySelectorAll(sel).forEach((grid) => {
+      const children = grid.children;
+      Array.from(children).forEach((child, i) => {
+        // Cap delay so very long grids don't drag
+        const delay = Math.min(i * 60, 360);
+        child.style.setProperty('--reveal-delay', delay + 'ms');
+        if (!child.classList.contains('reveal-child')) {
+          child.classList.add('reveal-child');
+        }
+      });
+    });
+  });
+
+  /* ---------- before / after slider + project chips ---------- */
+  const baCompare = document.getElementById('baCompare');
+  const baBefore = document.getElementById('baBefore');
+  const baAfter = document.getElementById('baAfter');
+  const baHandle = document.getElementById('baHandle');
+  const baCaption = document.getElementById('baCaption');
+  const projectChipRow = document.querySelector('#projects .chip-row');
+
+  const projectData = {
+    'living-room-1': {
+      title: 'Playroom reset',
+      caption: 'Deep clean &amp; declutter \u2014 toys cleared, carpet vacuumed, rug returned to a calm, livable space.',
+      beforeAlt: 'Before: cluttered playroom with scattered toys.',
+      afterAlt: 'After: tidy living room with rug, organized toys, vacuumed carpet.',
+    },
+    'bathroom-1': {
+      title: 'Guest bath refresh',
+      caption: 'Top-to-bottom bathroom clean \u2014 mirror, vanity, fixtures, floor. Spot-free and move-in ready.',
+      beforeAlt: 'Before: dusty bathroom vanity and smudged mirror.',
+      afterAlt: 'After: gleaming bathroom vanity, polished fixtures, streak-free mirror.',
+    },
+    'bathroom-2': {
+      title: 'Shower restoration',
+      caption: 'Soap-scum lift and grout brightening \u2014 tile and glass restored without harsh chemicals.',
+      beforeAlt: 'Before: shower with soap scum and dull grout.',
+      afterAlt: 'After: bright clean shower tile, clear glass, fresh grout.',
+    },
+    'cabinet-1': {
+      title: 'Vanity cabinet detail',
+      caption: 'Under-sink reset \u2014 wiped down, refreshed, and organized so the space actually works again.',
+      beforeAlt: 'Before: cluttered, dirty under-sink bathroom cabinet.',
+      afterAlt: 'After: clean, neatly organized under-sink storage.',
+    },
+    'cabinet-2': {
+      title: 'Storage cabinet declutter',
+      caption: 'Deep wipe-down plus sort-and-organize \u2014 cleaning supplies tidied, surfaces sanitized.',
+      beforeAlt: 'Before: disorganized storage cabinet with scattered supplies.',
+      afterAlt: 'After: organized storage cabinet, supplies neatly arranged.',
+    },
+    'blinds': {
+      title: 'Window blinds detail',
+      caption: 'Blade-by-blade dusting and wipe \u2014 from gray and grimy back to bright white in one visit.',
+      beforeAlt: 'Before: dusty, dirty window blinds.',
+      afterAlt: 'After: bright white, spotless window blinds.',
+    },
+  };
+
+  function setBaPos(pct) {
+    pct = Math.max(0, Math.min(100, pct));
+    if (baCompare) baCompare.style.setProperty('--ba-pos', pct + '%');
+    if (baHandle) baHandle.setAttribute('aria-valuenow', Math.round(pct));
+  }
+
+  if (baCompare && baHandle) {
+    setBaPos(50);
+
+    let dragging = false;
+    const setFromClientX = (clientX) => {
+      const rect = baCompare.getBoundingClientRect();
+      const pct = ((clientX - rect.left) / rect.width) * 100;
+      setBaPos(pct);
+    };
+
+    const onDown = (e) => {
+      dragging = true;
+      baHandle.setPointerCapture && e.pointerId != null && baHandle.setPointerCapture(e.pointerId);
+      setFromClientX(e.clientX);
+      e.preventDefault();
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      setFromClientX(e.clientX);
+    };
+    const onUp = () => {
+      dragging = false;
+    };
+
+    baHandle.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+
+    // Allow click/tap anywhere on the figure to jump the slider
+    baCompare.addEventListener('pointerdown', (e) => {
+      if (e.target === baHandle || baHandle.contains(e.target)) return;
+      setFromClientX(e.clientX);
+    });
+
+    // Keyboard support
+    baHandle.addEventListener('keydown', (e) => {
+      const current = parseFloat(
+        getComputedStyle(baCompare).getPropertyValue('--ba-pos'),
+      ) || 50;
+      let next = current;
+      switch (e.key) {
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          next = current - 2;
+          break;
+        case 'ArrowRight':
+        case 'ArrowUp':
+          next = current + 2;
+          break;
+        case 'Home':
+          next = 0;
+          break;
+        case 'End':
+          next = 100;
+          break;
+        case 'PageDown':
+          next = current - 10;
+          break;
+        case 'PageUp':
+          next = current + 10;
+          break;
+        default:
+          return;
+      }
+      e.preventDefault();
+      setBaPos(next);
+    });
+  }
+
+  if (projectChipRow && baBefore && baAfter && baCaption) {
+    const projectChips = projectChipRow.querySelectorAll('.chip[data-project]');
+    projectChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const key = chip.dataset.project;
+        const data = projectData[key];
+        if (!data) return;
+        projectChips.forEach((c) => {
+          c.classList.remove('is-active');
+          c.setAttribute('aria-selected', 'false');
+        });
+        chip.classList.add('is-active');
+        chip.setAttribute('aria-selected', 'true');
+        // Crossfade swap
+        baCompare.classList.add('is-swapping');
+        setTimeout(() => {
+          baBefore.src = 'images/projects/' + key + '-before.jpg';
+          baAfter.src = 'images/projects/' + key + '-after.jpg';
+          baBefore.alt = data.beforeAlt;
+          baAfter.alt = data.afterAlt;
+          baCaption.innerHTML =
+            '<strong>' + data.title + '</strong> \u00b7 ' + data.caption;
+          setBaPos(50);
+          requestAnimationFrame(() => {
+            baCompare.classList.remove('is-swapping');
+          });
+        }, 180);
+      });
+    });
+  }
+
   /* ---------- footer year ---------- */
   const yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
