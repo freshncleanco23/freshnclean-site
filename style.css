@@ -1266,7 +1266,9 @@ input[type='range']::-moz-range-thumb {
 }
 .contact-value-sm {
   font-size: var(--text-base);
-  word-break: break-all;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  hyphens: none;
 }
 .contact-cta {
   font-size: var(--text-xs);
@@ -2051,10 +2053,7 @@ input[type='range']::-moz-range-thumb {
   .row-2 {
     grid-template-columns: 1fr;
   }
-  .contact-person {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
-  }
+  /* .contact-person mobile layout moved to the @media (max-width: 720px) block below */
   .pricing-row {
     grid-template-columns: 1fr;
     gap: var(--space-1);
@@ -2109,5 +2108,55 @@ input[type='range']::-moz-range-thumb {
   #testimonials .chip-row {
     padding-inline: var(--space-1);
     margin-inline: calc(var(--space-1) * -1);
+  }
+
+  /* ===== Mobile anchor-scroll offset fix =====
+     Sticky header is 76px tall, sticky bottom CTA is ~70px tall.
+     scroll-padding-top must clear the header with a comfortable buffer
+     so section titles aren't tucked under the blurred header bar. */
+  html {
+    scroll-padding-top: 112px;
+  }
+
+  /* ===== Footer nav: let links wrap instead of overflowing ===== */
+  .footer-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-3);
+    column-gap: var(--space-5);
+  }
+
+  /* ===== Areas grid: 2 columns on mobile so the list isn't endless ===== */
+  .area-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    max-width: 100%;
+  }
+  .area-grid li {
+    flex: none;
+    padding: var(--space-3) var(--space-4);
+    min-width: 0;
+  }
+
+  /* ===== Contact-person email card: stack info above the CTA so the
+     email address gets the full row width and never mid-word-breaks ===== */
+  .contact-person {
+    flex-wrap: wrap;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+  }
+  .contact-person .contact-info {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .contact-person .contact-cta {
+    flex: 0 0 100%;
+    margin-left: calc(44px + var(--space-3)); /* align under text, past the icon */
+    text-align: left;
+  }
+  .contact-value-sm {
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
   }
 }
