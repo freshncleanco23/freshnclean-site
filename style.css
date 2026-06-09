@@ -1318,6 +1318,14 @@ input[type='range']::-moz-range-thumb {
   letter-spacing: 0.04em;
 }
 
+/* Desktop: keep the form visible while reading the left column. */
+@media (min-width: 900px) {
+  .contact-form {
+    position: sticky;
+    top: calc(76px + var(--space-6));
+    align-self: start;
+  }
+}
 .contact-form {
   background: var(--color-surface);
   border: 1px solid var(--color-divider);
@@ -1738,14 +1746,12 @@ input[type='range']::-moz-range-thumb {
   border-block: 1px solid var(--color-divider);
 }
 #projects .chip-row {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: visible;
   padding: var(--space-2) 0 var(--space-6);
   margin-bottom: var(--space-6);
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x proximity;
+  gap: var(--space-2) var(--space-3);
 }
 #projects .chip-row::-webkit-scrollbar { display: none; }
 #projects .chip-row .chip {
@@ -2124,6 +2130,21 @@ input[type='range']::-moz-range-thumb {
     justify-content: center;
     row-gap: var(--space-3);
     column-gap: var(--space-5);
+  }
+
+  /* ===== Projects chip row: revert to horizontal scroll on mobile so chips
+     stay on a single tappable row instead of breaking into many lines ===== */
+  #projects .chip-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  #projects .chip-row .chip {
+    scroll-snap-align: start;
   }
 
   /* ===== Areas grid: 2 columns on mobile so the list isn't endless ===== */
