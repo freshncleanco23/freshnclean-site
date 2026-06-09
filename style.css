@@ -1342,7 +1342,6 @@ input[type='range']::-moz-range-thumb {
     grid-template-columns: 1fr;
   }
   .hero-card {
-    order: -1;
     max-width: 480px;
   }
   .testimonial.featured-quote {
