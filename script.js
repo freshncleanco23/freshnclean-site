@@ -116,9 +116,21 @@
 
   update();
 
-  /* ---------- contact form (mailto fallback) ---------- */
+  /* ---------- contact form -> Google Forms ---------- */
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
+  const GFORM = {
+    action:
+      'https://docs.google.com/forms/d/e/1FAIpQLScZOOHHYmJ2y09BsYZs0gyj9rspguA1n-0Jywb9Ge-mavdSHg/formResponse',
+    fields: {
+      name: 'entry.41484401',
+      phone: 'entry.148578414',
+      email: 'entry.248603442',
+      zip: 'entry.1105344650',
+      service: 'entry.255196046',
+      notes: 'entry.2108996397',
+    },
+  };
   form &&
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -130,21 +142,54 @@
         status.style.color = 'var(--color-error)';
         return;
       }
-      const body = [
-        `Name: ${name}`,
-        `Phone: ${data.get('phone') || ''}`,
-        `Email: ${email}`,
-        `City / Zip: ${data.get('zip') || ''}`,
-        `Service: ${data.get('service') || ''}`,
-        ``,
-        `${data.get('notes') || ''}`,
-      ].join('\n');
-      const mailto = `mailto:freshncleanco23@gmail.com?subject=${encodeURIComponent(
-        'Quote request from ' + name,
-      )}&body=${encodeURIComponent(body)}`;
-      status.textContent = 'Opening your email — we usually reply within a day.';
-      status.style.color = 'var(--color-primary)';
-      window.location.href = mailto;
+
+      // Build a hidden form that posts to Google Forms inside an off-screen iframe.
+      // This keeps the visitor on our page (Google's CORS won't let fetch() succeed,
+      // but a classic form POST to an iframe target works).
+      const sink = document.getElementById('quoteFormSink');
+      const ghost = document.createElement('form');
+      ghost.action = GFORM.action;
+      ghost.method = 'POST';
+      ghost.target = 'quoteFormSink';
+      ghost.style.display = 'none';
+      Object.entries(GFORM.fields).forEach(([key, entryId]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = entryId;
+        input.value = (data.get(key) || '').toString();
+        ghost.appendChild(input);
+      });
+      document.body.appendChild(ghost);
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.label = submitBtn.textContent;
+        submitBtn.textContent = 'Sending…';
+      }
+      status.textContent = '';
+
+      // The iframe will fire 'load' once Google responds.
+      const onDone = () => {
+        status.textContent =
+          'Thanks! We got your request — Camryn or Alex will reply within one business day.';
+        status.style.color = 'var(--color-primary)';
+        form.reset();
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = submitBtn.dataset.label || 'Send Request';
+        }
+        ghost.remove();
+        sink && sink.removeEventListener('load', onDone);
+      };
+      sink && sink.addEventListener('load', onDone);
+
+      // Safety timeout in case the iframe load never fires (e.g. blocked).
+      setTimeout(() => {
+        if (submitBtn && submitBtn.disabled) onDone();
+      }, 4000);
+
+      ghost.submit();
     });
 
   /* ---------- service filter chips (YouTube-style) ---------- */
