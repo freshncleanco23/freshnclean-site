@@ -1062,7 +1062,7 @@ input[type='range']::-moz-range-thumb {
   display: block;
 }
 .contact-team-photo {
-  margin: 0 0 var(--space-6);
+  margin: 0 auto var(--space-6);
   border-radius: var(--radius-lg);
   overflow: hidden;
   max-width: 320px;
