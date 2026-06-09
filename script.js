@@ -369,6 +369,60 @@
       beforeAlt: 'Before: playroom carpet with scattered toys and a crumpled rug.',
       afterAlt: 'After: tidy playroom with rug straightened and carpet freshly vacuumed.',
     },
+    'fridge-1': {
+      title: 'Stainless fridge polish',
+      caption: 'Fingerprints and smudges cut from front and drawer \u2014 clean, streak-free finish.',
+      beforeAlt: 'Before: stainless steel refrigerator covered in fingerprints and smudges.',
+      afterAlt: 'After: streak-free stainless steel refrigerator with a clean, polished finish.',
+    },
+    'floor-1': {
+      title: 'Granite floor restoration',
+      caption: 'Black tile floor stripped of haze and film \u2014 back to a deep mirror shine.',
+      beforeAlt: 'Before: dark tile floor dulled by haze and film.',
+      afterAlt: 'After: deep, glossy black tile floor with a mirror shine.',
+    },
+    'garage-1': {
+      title: 'Garage clear-out',
+      caption: 'Boxes, tools, and yard gear sorted and stowed \u2014 concrete bay swept and walkable again.',
+      beforeAlt: 'Before: garage bay cluttered with boxes, tools, and yard gear.',
+      afterAlt: 'After: organized garage with a swept concrete floor and gear neatly stowed.',
+    },
+    'bedroom-1': {
+      title: 'Bedroom reset',
+      caption: 'Bed made, pillows fluffed, clothes cleared, carpet vacuumed \u2014 a calm room to come home to.',
+      beforeAlt: 'Before: messy bedroom with unmade bed and clothes scattered around.',
+      afterAlt: 'After: tidy bedroom with a neatly made bed and a vacuumed carpet.',
+    },
+    'blinds-1': {
+      title: 'Window blinds detail',
+      caption: 'Blade-by-blade dusting and wipe \u2014 from grey and grimy back to bright white.',
+      beforeAlt: 'Before: dusty grey window blinds caked with grime.',
+      afterAlt: 'After: clean, bright white window blinds with each blade wiped down.',
+    },
+    'cabinet-1': {
+      title: 'Under-sink reset (bath)',
+      caption: 'Jumbled bottles and bags organized into baskets and stackable drawers.',
+      beforeAlt: 'Before: bathroom under-sink cabinet crammed with jumbled bottles and bags.',
+      afterAlt: 'After: bathroom under-sink cabinet organized into baskets and stackable drawers.',
+    },
+    'cabinet-2': {
+      title: 'Under-sink reset (vanity)',
+      caption: 'Tangled tools and toiletries staged on tiered shelves with clear bins.',
+      beforeAlt: 'Before: vanity under-sink cabinet with tangled tools and toiletries piled together.',
+      afterAlt: 'After: vanity under-sink cabinet staged on tiered shelves with clear bins.',
+    },
+    'cabinet-3': {
+      title: 'Storage cabinet declutter',
+      caption: 'Pile of bags, boxes, and cords cleared out \u2014 clean shelves, a few essentials.',
+      beforeAlt: 'Before: storage cabinet stuffed with bags, boxes, and tangled cords.',
+      afterAlt: 'After: storage cabinet with clean shelves and only a few essentials remaining.',
+    },
+    'dresser-1': {
+      title: 'Armoire fold &amp; stack',
+      caption: 'Clothes pulled, sorted, and folded into clean stacks \u2014 drawers usable again.',
+      beforeAlt: 'Before: armoire drawers overflowing with unsorted clothing.',
+      afterAlt: 'After: armoire drawers with clothes folded into clean, organized stacks.',
+    },
   };
 
   function setBaPos(pct) {
