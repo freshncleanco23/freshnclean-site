@@ -2086,6 +2086,12 @@ input[type='range']::-moz-range-thumb {
     max-width: 360px;
     margin: 0 auto;
   }
+  /* About section responsive patch: keep divider + stats border
+     flush with heading width on single-column layouts */
+  .about-divider,
+  .about-stats {
+    max-width: none;
+  }
 }
 
 @media (max-width: 720px) {
@@ -2223,5 +2229,29 @@ input[type='range']::-moz-range-thumb {
   .contact-value-sm {
     font-size: 0.95rem;
     letter-spacing: -0.01em;
+  }
+}
+
+/* About section responsive patch: small-screen polish
+   Placed after the @media (max-width: 720px) block so these
+   narrower-viewport overrides win in source-order ties. */
+@media (max-width: 599px) {
+  /* Keep photo from spanning edge-to-edge so the -20px badge sits inside */
+  .about-image {
+    margin-inline: var(--space-2);
+  }
+  .about-badge {
+    right: 0;
+    bottom: -16px;
+    padding: var(--space-3) var(--space-4);
+  }
+  /* Tighten and balance the stats row on narrow phones */
+  .about-stats {
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+  }
+  .about-stats div {
+    min-width: 30%;
   }
 }
