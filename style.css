@@ -1123,6 +1123,15 @@ input[type='range']::-moz-range-thumb {
   color: var(--color-text-muted);
   max-width: 60ch;
 }
+.about-divider {
+  height: 1px;
+  background: var(--color-divider);
+  margin: var(--space-10) 0 var(--space-8);
+  max-width: 60ch;
+}
+.about-copy .about-divider + .section-title {
+  margin-top: 0;
+}
 .about-stats {
   display: flex;
   align-items: flex-start;
