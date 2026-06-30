@@ -768,11 +768,12 @@ select {
 }
 .rate em {
   font-style: normal;
-  font-family: var(--font-display);
-  color: var(--color-primary);
-  font-weight: 600;
-  font-size: var(--text-xl);
-  letter-spacing: -0.01em;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  font-weight: 400;
+  font-size: var(--text-base);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
 }
 .rate-unit {
   font-size: var(--text-sm);
@@ -789,6 +790,36 @@ select {
   margin: var(--space-8) auto 0;
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+}
+.pricing-disclaimer {
+  max-width: 760px;
+  margin: var(--space-6) auto 0;
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: 1.55;
+}
+.pricing-disclaimer strong {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+}
+.pricing-disclaimer ul {
+  list-style: disc;
+  margin: var(--space-2) 0 0 var(--space-5);
+  color: var(--color-text-muted);
+}
+.pricing-disclaimer li {
+  margin-top: var(--space-1);
 }
 
 /* ===== calculator ===== */
