@@ -523,6 +523,8 @@
           const baseAfter  = 'images/projects/' + key + '-after';
           baBefore.srcset = baseBefore + '-sm.webp 720w, ' + baseBefore + '.webp 1080w';
           baAfter.srcset  = baseAfter  + '-sm.webp 720w, ' + baseAfter  + '.webp 1080w';
+          baBefore.sizes = '(max-width: 900px) 90vw, 600px';
+          baAfter.sizes  = '(max-width: 900px) 90vw, 600px';
           baBefore.src = baseBefore + '-sm.webp';
           baAfter.src  = baseAfter  + '-sm.webp';
           baBefore.alt = data.beforeAlt;
