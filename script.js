@@ -591,17 +591,87 @@
   });
 })();
 
-/* ============ VIDEO GALLERY ============ */
+/* ============ VIDEO GALLERY (lazy-loaded) ============ */
 (function initVideoGallery() {
   const frames = document.querySelectorAll('.video-frame');
   if (!frames.length) return;
+
+  // Hydrate a single video: attach poster (image) and <source> element.
+  // Idempotent — safe to call more than once.
+  const hydrate = (video, { withSource = false } = {}) => {
+    if (!video) return;
+    const posterUrl = video.dataset.poster;
+    if (posterUrl && !video.poster) {
+      video.poster = posterUrl;
+    }
+    if (withSource) {
+      const srcUrl = video.dataset.src;
+      if (srcUrl && !video.querySelector('source')) {
+        const source = document.createElement('source');
+        source.src = srcUrl;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        // NOTE: we intentionally do NOT call video.load() here. Calling load()
+        // forces the browser to fetch the file even with preload="none". By
+        // skipping it, the <source> is wired but no bytes are downloaded until
+        // the user actually presses play.
+      }
+    }
+  };
+
+  // Observer #1: when the video card is within ~600px of the viewport,
+  // load the poster image so the user sees the preview before scrolling in.
+  const posterObserver = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target.querySelector('.video-player');
+            hydrate(video, { withSource: false });
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '1500px 0px', threshold: 0 })
+    : null;
+
+  // Observer #2: when the card is actually visible, attach the <source>
+  // so the browser can begin metadata negotiation on play. preload="none"
+  // still prevents the body from downloading until the user hits play.
+  const sourceObserver = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target.querySelector('.video-player');
+            hydrate(video, { withSource: true });
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '200px 0px', threshold: 0.01 })
+    : null;
 
   frames.forEach((frame) => {
     const video = frame.querySelector('.video-player');
     const playBtn = frame.querySelector('.video-play');
     if (!video || !playBtn) return;
 
+    if (posterObserver && sourceObserver) {
+      posterObserver.observe(frame);
+      sourceObserver.observe(frame);
+    } else {
+      // Fallback: no IntersectionObserver — hydrate immediately.
+      hydrate(video, { withSource: true });
+    }
+
     const startPlayback = () => {
+      // Ensure the <source> is attached before play (handles direct-tap before
+      // the source observer has fired).
+      hydrate(video, { withSource: true });
+
+      // The first play after appending a <source> may need a load() so the
+      // browser realises it now has a media resource to fetch.
+      if (video.readyState === 0) {
+        try { video.load(); } catch (_) { /* no-op */ }
+      }
+
       // Pause any other videos that are currently playing
       document.querySelectorAll('.video-player').forEach((v) => {
         if (v !== video && !v.paused) {
