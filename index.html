@@ -300,7 +300,17 @@
             </p>
           </div>
 
-          <div class="video-grid reveal">
+          <div class="video-carousel reveal" data-video-carousel>
+            <button
+              class="video-carousel-arrow video-carousel-arrow-prev"
+              type="button"
+              aria-label="Previous video"
+              data-carousel-prev
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+
+            <div class="video-track" data-carousel-track tabindex="0" role="region" aria-label="Video walkthroughs" aria-roledescription="carousel">
             <figure class="video-card" data-lazy-video>
               <div class="video-frame">
                 <video
@@ -372,6 +382,18 @@
                 <strong>Children's playroom reset</strong> · From chaos to calm: toys sorted, surfaces wiped, floors restored.
               </figcaption>
             </figure>
+            </div>
+
+            <button
+              class="video-carousel-arrow video-carousel-arrow-next"
+              type="button"
+              aria-label="Next video"
+              data-carousel-next
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+
+            <div class="video-carousel-dots" role="tablist" aria-label="Video carousel pagination" data-carousel-dots></div>
           </div>
         </div>
       </section>

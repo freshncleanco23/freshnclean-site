@@ -698,3 +698,127 @@
     video.addEventListener('ended', () => frame.classList.remove('is-playing'));
   });
 })();
+
+/* ============ VIDEO CAROUSEL ============ */
+(function initVideoCarousel() {
+  const carousel = document.querySelector('[data-video-carousel]');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('[data-carousel-track]');
+  const prevBtn = carousel.querySelector('[data-carousel-prev]');
+  const nextBtn = carousel.querySelector('[data-carousel-next]');
+  const dotsHost = carousel.querySelector('[data-carousel-dots]');
+  if (!track || !dotsHost) return;
+
+  const cards = Array.from(track.querySelectorAll('.video-card'));
+  if (!cards.length) return;
+
+  // Build dot indicators, one per card. Each dot snaps the matching card
+  // to the start of the visible track.
+  const dots = cards.map((card, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'video-carousel-dot';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Go to video ${i + 1}`);
+    dot.dataset.index = String(i);
+    dot.addEventListener('click', () => scrollToIndex(i));
+    dotsHost.appendChild(dot);
+    return dot;
+  });
+
+  const scrollToIndex = (i) => {
+    const target = cards[i];
+    if (!target) return;
+    const offset = target.offsetLeft - track.offsetLeft;
+    track.scrollTo({ left: offset, behavior: 'smooth' });
+  };
+
+  // Determine which card is "active" based on track scrollLeft.
+  // Active = card whose left edge is closest to (or just past) the track's
+  // current scroll position.
+  const computeActiveIndex = () => {
+    const scrollLeft = track.scrollLeft;
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const cardLeft = card.offsetLeft - track.offsetLeft;
+      const dist = Math.abs(cardLeft - scrollLeft);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestIdx = i;
+      }
+    });
+    return bestIdx;
+  };
+
+  // Disable arrows when at start/end based on whether the track is at the
+  // extreme of its scrollable range. Tolerance allows for any inline padding
+  // on the track (e.g. .video-track has padding-inline).
+  const TOL = 8;
+  const updateArrows = () => {
+    if (!prevBtn || !nextBtn) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const atStart = track.scrollLeft <= TOL;
+    const atEnd = track.scrollLeft >= maxScroll - TOL;
+    prevBtn.classList.toggle('is-disabled', atStart);
+    prevBtn.setAttribute('aria-disabled', atStart ? 'true' : 'false');
+    nextBtn.classList.toggle('is-disabled', atEnd);
+    nextBtn.setAttribute('aria-disabled', atEnd ? 'true' : 'false');
+    // Hide both arrows AND dots when the track isn't scrollable (e.g. all
+    // cards fit at wide viewports).
+    const noScroll = maxScroll < TOL;
+    prevBtn.style.display = noScroll ? 'none' : '';
+    nextBtn.style.display = noScroll ? 'none' : '';
+    if (dotsHost) dotsHost.style.display = noScroll ? 'none' : '';
+  };
+
+  const updateDots = () => {
+    const active = computeActiveIndex();
+    dots.forEach((dot, i) => {
+      const isActive = i === active;
+      dot.classList.toggle('is-active', isActive);
+      dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  };
+
+  const refresh = () => { updateDots(); updateArrows(); };
+
+  // Arrow handlers: scroll by one card width (plus gap) in either direction.
+  const cardStep = () => {
+    if (cards.length < 2) return cards[0]?.getBoundingClientRect().width || 300;
+    return cards[1].offsetLeft - cards[0].offsetLeft;
+  };
+
+  prevBtn?.addEventListener('click', () => {
+    track.scrollBy({ left: -cardStep(), behavior: 'smooth' });
+  });
+  nextBtn?.addEventListener('click', () => {
+    track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+  });
+
+  // Keyboard support when the track region has focus
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: cardStep(), behavior: 'smooth' }); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -cardStep(), behavior: 'smooth' }); }
+    else if (e.key === 'Home') { e.preventDefault(); scrollToIndex(0); }
+    else if (e.key === 'End') { e.preventDefault(); scrollToIndex(cards.length - 1); }
+  });
+
+  // Sync state on scroll (debounced via rAF)
+  let scrollRaf = 0;
+  track.addEventListener('scroll', () => {
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(() => { scrollRaf = 0; refresh(); });
+  }, { passive: true });
+
+  // Recompute on resize (card widths change with viewport)
+  let resizeRaf = 0;
+  window.addEventListener('resize', () => {
+    if (resizeRaf) return;
+    resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; refresh(); });
+  });
+
+  // Initial paint
+  refresh();
+})();
