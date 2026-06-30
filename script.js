@@ -517,8 +517,14 @@
         // Crossfade swap
         baCompare.classList.add('is-swapping');
         setTimeout(() => {
-          baBefore.src = 'images/projects/' + key + '-before.jpg';
-          baAfter.src = 'images/projects/' + key + '-after.jpg';
+          // Use srcset so browser picks the right resolution per viewport.
+          // -sm variant (720w) for mobile, full (1080w) for desktop.
+          const baseBefore = 'images/projects/' + key + '-before';
+          const baseAfter  = 'images/projects/' + key + '-after';
+          baBefore.srcset = baseBefore + '-sm.webp 720w, ' + baseBefore + '.webp 1080w';
+          baAfter.srcset  = baseAfter  + '-sm.webp 720w, ' + baseAfter  + '.webp 1080w';
+          baBefore.src = baseBefore + '-sm.webp';
+          baAfter.src  = baseAfter  + '-sm.webp';
           baBefore.alt = data.beforeAlt;
           baAfter.alt = data.afterAlt;
           baCaption.innerHTML =

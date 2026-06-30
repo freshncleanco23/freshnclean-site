@@ -40,10 +40,18 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/images/social-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload hero LCP image (responsive — browser picks size based on viewport) -->
+    <link rel="preload" as="image" imagesrcset="images/hero-cinematic-sm.webp 960w, images/hero-cinematic.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high" />
+    <!-- Google Fonts loaded async to avoid render-blocking. Falls back to system fonts during load (display=swap). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" />
+    </noscript>
     <link rel="stylesheet" href="style.css" />
     <link
       rel="icon"
@@ -117,7 +125,10 @@
       <!-- ============ HERO (cinematic) ============ -->
       <section class="hero hero-cinematic">
         <div class="hero-image" aria-hidden="true">
-          <img src="images/hero-cinematic.jpg" alt="" />
+          <picture>
+            <source type="image/webp" srcset="images/hero-cinematic-sm.webp 960w, images/hero-cinematic.webp 1920w" sizes="100vw" />
+            <img src="images/hero-cinematic.jpg" alt="" width="1920" height="1072" fetchpriority="high" decoding="async" />
+          </picture>
           <div class="hero-image-scrim"></div>
         </div>
         <div class="container hero-inner">
@@ -271,8 +282,8 @@
 
           <div class="ba-stage reveal" id="baStage">
             <figure class="ba-compare" id="baCompare" role="img" aria-label="Before and after comparison, drag to reveal">
-              <img class="ba-img ba-after" id="baAfter" src="images/projects/kitchen-1-after.jpg" alt="After Fresh N Clean cleaning: clean, organized kitchen." />
-              <img class="ba-img ba-before" id="baBefore" src="images/projects/kitchen-1-before.jpg" alt="Before Fresh N Clean cleaning: cluttered, dirty kitchen." />
+              <img class="ba-img ba-after" id="baAfter" src="images/projects/kitchen-1-after-sm.webp" srcset="images/projects/kitchen-1-after-sm.webp 720w, images/projects/kitchen-1-after.webp 1080w" sizes="(max-width: 720px) 100vw, 600px" alt="After Fresh N Clean cleaning: clean, organized kitchen." width="1080" height="1428" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace(/\.webp$/,'.jpg');" />
+              <img class="ba-img ba-before" id="baBefore" src="images/projects/kitchen-1-before-sm.webp" srcset="images/projects/kitchen-1-before-sm.webp 720w, images/projects/kitchen-1-before.webp 1080w" sizes="(max-width: 720px) 100vw, 600px" alt="Before Fresh N Clean cleaning: cluttered, dirty kitchen." width="1080" height="1436" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace(/\.webp$/,'.jpg');" />
               <button class="ba-handle" id="baHandle" type="button" aria-label="Drag to compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" role="slider">
                 <span class="ba-handle-line" aria-hidden="true"></span>
                 <span class="ba-handle-knob" aria-hidden="true">
@@ -321,7 +332,7 @@
                   width="540"
                   height="960"
                   data-src="videos/bathroom-1.mp4"
-                  data-poster="images/video-posters/bathroom-1.jpg"
+                  data-poster="images/video-posters/bathroom-1.webp"
                   aria-label="Bathroom deep-clean walkthrough"
                 >
                   Your browser doesn't support HTML5 video.
@@ -345,7 +356,7 @@
                   width="540"
                   height="960"
                   data-src="videos/bathroom-2.mp4"
-                  data-poster="images/video-posters/bathroom-2.jpg"
+                  data-poster="images/video-posters/bathroom-2.webp"
                   aria-label="Bathroom detail walkthrough"
                 >
                   Your browser doesn't support HTML5 video.
@@ -369,7 +380,7 @@
                   width="540"
                   height="960"
                   data-src="videos/playroom.mp4"
-                  data-poster="images/video-posters/playroom.jpg"
+                  data-poster="images/video-posters/playroom.webp"
                   aria-label="Children's playroom reset walkthrough"
                 >
                   Your browser doesn't support HTML5 video.
@@ -639,7 +650,10 @@
         <div class="container about-grid reveal">
           <div class="about-image">
             <div class="about-photo">
-              <img src="images/co-owners-kitchen.jpg" alt="Camryn (left) and Alex (right), co-owners of Fresh N Clean, standing back-to-back in a bright kitchen with spray bottles and green cleaning gloves." loading="lazy" decoding="async" />
+              <picture>
+                <source type="image/webp" srcset="images/co-owners-kitchen-sm.webp 720w, images/co-owners-kitchen.webp 1015w" sizes="(max-width: 720px) 100vw, 500px" />
+                <img src="images/co-owners-kitchen.jpg" alt="Camryn (left) and Alex (right), co-owners of Fresh N Clean, standing back-to-back in a bright kitchen with spray bottles and green cleaning gloves." width="1015" height="1400" loading="lazy" decoding="async" />
+              </picture>
             </div>
             <div class="about-badge">
               <strong>Camryn &amp; Alex</strong>
@@ -723,7 +737,10 @@
                 and the service you'd like, and we'll send back a firm quote.
               </p>
               <figure class="contact-team-photo">
-                <img src="images/co-owners-marble.jpg" alt="Camryn (left) and Alex (right), co-owners of Fresh N Clean." loading="lazy" decoding="async" />
+                <picture>
+                  <source type="image/webp" srcset="images/co-owners-marble-sm.webp 720w, images/co-owners-marble.webp 1009w" sizes="(max-width: 720px) 100vw, 500px" />
+                  <img src="images/co-owners-marble.jpg" alt="Camryn (left) and Alex (right), co-owners of Fresh N Clean." width="1009" height="1400" loading="lazy" decoding="async" />
+                </picture>
                 <figcaption>Camryn &amp; Alex, your local co-owners.</figcaption>
               </figure>
               <div class="contact-people">
