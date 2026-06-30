@@ -2255,3 +2255,151 @@ input[type='range']::-moz-range-thumb {
     min-width: 30%;
   }
 }
+
+/* ============ VIDEOS ============ */
+.section-videos {
+  background: var(--color-surface);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-offset);
+  box-shadow: var(--shadow-md);
+  isolation: isolate;
+}
+
+.video-player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+
+.video-play {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%);
+  border: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  z-index: 2;
+  color: #fff;
+  padding: 0;
+}
+
+.video-play::before {
+  content: "";
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-lg);
+  position: absolute;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.video-play svg {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  z-index: 1;
+  color: var(--color-primary);
+  margin-left: 4px; /* optical center for triangle */
+  transition: transform 0.2s ease;
+}
+
+.video-frame:hover .video-play::before,
+.video-play:focus-visible::before {
+  transform: scale(1.08);
+  background: #fff;
+}
+
+.video-frame:hover .video-play svg,
+.video-play:focus-visible svg {
+  transform: scale(1.08);
+}
+
+.video-play:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+.video-frame.is-playing .video-play {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-caption {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.video-caption strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+  }
+  .video-card:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - var(--space-3));
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .video-card:last-child {
+    max-width: none;
+    margin-inline: 0;
+  }
+  .video-frame {
+    max-width: 420px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .video-play::before {
+    width: 64px;
+    height: 64px;
+  }
+  .video-play svg {
+    width: 28px;
+    height: 28px;
+  }
+}
