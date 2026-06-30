@@ -1,5 +1,5 @@
 /* ============================================================
-   Fresh N Clean — site script
+   Fresh N Clean site script
    - theme toggle (light/dark)
    - mobile nav
    - sticky header shadow
@@ -172,7 +172,7 @@
       // The iframe will fire 'load' once Google responds.
       const onDone = () => {
         status.textContent =
-          'Thanks! We got your request — Camryn or Alex will reply within one business day.';
+          'Thanks! We got your request. Camryn or Alex will reply within one business day.';
         status.style.color = 'var(--color-primary)';
         form.reset();
         if (submitBtn) {
@@ -597,7 +597,7 @@
   if (!frames.length) return;
 
   // Hydrate a single video: attach poster (image) and <source> element.
-  // Idempotent — safe to call more than once.
+  // Idempotent: safe to call more than once.
   const hydrate = (video, { withSource = false } = {}) => {
     if (!video) return;
     const posterUrl = video.dataset.poster;
@@ -657,7 +657,7 @@
       posterObserver.observe(frame);
       sourceObserver.observe(frame);
     } else {
-      // Fallback: no IntersectionObserver — hydrate immediately.
+      // Fallback: no IntersectionObserver, hydrate immediately.
       hydrate(video, { withSource: true });
     }
 
@@ -682,7 +682,7 @@
       const playPromise = video.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
-          // Autoplay blocked — fall back to native controls
+          // Autoplay blocked. Fall back to native controls.
         });
       }
       frame.classList.add('is-playing');

@@ -1,5 +1,5 @@
 /* =========================================================
-   Fresh N Clean — Stylesheet
+   Fresh N Clean Stylesheet
    Palette: sage green primary, warm cream surfaces, deep ink text
    Type: Fraunces (display) + Inter (body)
    ========================================================= */
@@ -21,13 +21,13 @@
   --color-text-faint: #a8ad9f;
   --color-text-inverse: #fdfcf8;
 
-  /* Primary — sage green */
+  /* Primary: sage green */
   --color-primary: #1f6b54;
   --color-primary-hover: #19543f;
   --color-primary-active: #133e2f;
   --color-primary-highlight: #d8e6dc;
 
-  /* Accent — warm gold (used very sparingly) */
+  /* Accent: warm gold (used very sparingly) */
   --color-accent: #c79341;
   --color-accent-highlight: #f1e3c3;
 
