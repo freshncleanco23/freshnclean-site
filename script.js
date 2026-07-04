@@ -381,57 +381,77 @@ if (baHandle) baHandle.setAttribute('aria-valuenow', Math.round(pct));
 if (baCompare && baHandle) {
 setBaPos(50);
 let dragging = false;
-const setFromClientX = (clientX) => {
+let touchActive = false; // when true, ignore pointer events (touch is authoritative on iOS)
+let rafId = 0;
+let pendingX = null;
+const applyPending = () => {
+rafId = 0;
+if (pendingX == null) return;
 const rect = baCompare.getBoundingClientRect();
-const pct = ((clientX - rect.left) / rect.width) * 100;
+const pct = ((pendingX - rect.left) / rect.width) * 100;
 setBaPos(pct);
+pendingX = null;
 };
-// Pointer events (desktop, modern browsers)
+const scheduleFromX = (clientX) => {
+pendingX = clientX;
+if (!rafId) rafId = requestAnimationFrame(applyPending);
+};
+// Pointer events (desktop + non-iOS mobile)
 const onDown = (e) => {
+if (touchActive) return;
 dragging = true;
 try { baHandle.setPointerCapture && e.pointerId != null && baHandle.setPointerCapture(e.pointerId); } catch(_) {}
-setFromClientX(e.clientX);
+scheduleFromX(e.clientX);
 if (e.cancelable) e.preventDefault();
 };
 const onMove = (e) => {
-if (!dragging) return;
-setFromClientX(e.clientX);
+if (!dragging || touchActive) return;
+scheduleFromX(e.clientX);
 if (e.cancelable) e.preventDefault();
 };
-const onUp = () => { dragging = false; };
+const onUp = () => { if (!touchActive) dragging = false; };
 baHandle.addEventListener('pointerdown', onDown);
 window.addEventListener('pointermove', onMove, { passive: false });
 window.addEventListener('pointerup', onUp);
 window.addEventListener('pointercancel', onUp);
 baCompare.addEventListener('pointerdown', (e) => {
+if (touchActive) return;
 if (e.target === baHandle || baHandle.contains(e.target)) return;
-setFromClientX(e.clientX);
+scheduleFromX(e.clientX);
 });
-// Explicit touch fallback for iOS Safari — pointer events are unreliable on iOS
-// when a touch inside a scrollable region needs to be captured for horizontal drag.
+// Explicit touch handlers for iOS Safari. On iOS, both touch and (synthetic) pointer
+// events fire for the same gesture — we mark touchActive to make touch authoritative
+// and suppress the duplicate pointer path that causes jumpy updates.
 const getTouchX = (e) => {
 const t = e.touches && e.touches[0] ? e.touches[0] : (e.changedTouches && e.changedTouches[0]);
 return t ? t.clientX : 0;
 };
 const onTouchStart = (e) => {
+touchActive = true;
 dragging = true;
-setFromClientX(getTouchX(e));
+scheduleFromX(getTouchX(e));
 if (e.cancelable) e.preventDefault();
 };
 const onTouchMove = (e) => {
 if (!dragging) return;
-setFromClientX(getTouchX(e));
+scheduleFromX(getTouchX(e));
 if (e.cancelable) e.preventDefault();
 };
-const onTouchEnd = () => { dragging = false; };
+const onTouchEnd = () => {
+dragging = false;
+// Release touchActive on the next frame so trailing synthetic pointer events
+// (which fire after touchend on iOS) don't reset the position.
+setTimeout(() => { touchActive = false; }, 300);
+};
 baHandle.addEventListener('touchstart', onTouchStart, { passive: false });
 baHandle.addEventListener('touchmove', onTouchMove, { passive: false });
 baHandle.addEventListener('touchend', onTouchEnd);
 baHandle.addEventListener('touchcancel', onTouchEnd);
 baCompare.addEventListener('touchstart', (e) => {
 if (e.target === baHandle || baHandle.contains(e.target)) return;
+touchActive = true;
 dragging = true;
-setFromClientX(getTouchX(e));
+scheduleFromX(getTouchX(e));
 if (e.cancelable) e.preventDefault();
 }, { passive: false });
 baCompare.addEventListener('touchmove', onTouchMove, { passive: false });
