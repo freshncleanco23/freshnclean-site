@@ -185,3 +185,567 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
 [data-theme="dark"] .logo.logo-brand .logo-tag {
   border-left-color: rgba(255,255,255,0.14);
 }
+
+/* ============================================================
+   CRITICAL FIX: reveal-child had no is-visible rule anywhere,
+   which left service cards, project cards, and testimonials
+   permanently invisible (opacity: 0). This restores them.
+   ============================================================ */
+.reveal.is-visible .reveal-child,
+.reveal-child.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   Testimonial cards — previously had ZERO styling.
+   ============================================================ */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 16px);
+  position: relative;
+  transition: transform var(--transition-interactive), box-shadow var(--transition-interactive);
+}
+.testimonial:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+/* Decorative open-quote glyph — only on cards WITHOUT the inline SVG quote-mark */
+.testimonial:not(.featured-quote)::before {
+  content: "\201C";
+  position: absolute;
+  top: 0.05em;
+  left: 0.4em;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--color-primary);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+/* Inline SVG quote mark used by the featured testimonial */
+.testimonial .quote-mark {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  opacity: 0.75;
+  margin-bottom: calc(var(--space-2) * -1);
+}
+.testimonial.featured-quote .quote-mark {
+  color: var(--color-primary-active, var(--color-primary));
+  opacity: 0.85;
+}
+.testimonial blockquote {
+  margin: 0;
+  padding: 0;
+  padding-top: var(--space-3);
+  color: var(--color-text);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  quotes: none;
+}
+.testimonial blockquote::before,
+.testimonial blockquote::after {
+  content: none;
+}
+.testimonial figcaption {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.005em;
+}
+.testimonial.is-hidden { display: none; }
+
+/* Featured testimonial — subtly emphasized */
+.testimonial[data-tags~="featured"] {
+  background: var(--color-sage-light);
+  border-color: color-mix(in oklab, var(--color-primary) 30%, transparent);
+}
+.testimonial[data-tags~="featured"] blockquote,
+.testimonial[data-tags~="featured"] figcaption {
+  color: var(--color-primary-active, var(--color-primary));
+}
+.testimonial[data-tags~="featured"] figcaption {
+  border-top-color: color-mix(in oklab, var(--color-primary) 22%, transparent);
+}
+
+/* ============================================================
+   Pricing table (was completely unstyled)
+   ============================================================ */
+.pricing-table {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--color-surface);
+  overflow: hidden;
+  margin-top: var(--space-8);
+}
+.pricing-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.8fr;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-divider);
+}
+.pricing-row:last-child { border-bottom: none; }
+.pricing-row.pricing-head {
+  background: color-mix(in oklab, var(--color-primary) 6%, transparent);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.pricing-row strong {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-text);
+}
+.pricing-row .rate {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+}
+.pricing-row .rate em {
+  font-style: normal;
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+.pricing-row .rate-unit {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-body, inherit);
+}
+.pricing-row .muted {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   Quote calculator (was mostly unstyled)
+   ============================================================ */
+.calculator {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 16px);
+  margin-top: var(--space-8);
+}
+.calc-controls { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.calculator .field {
+  border: none; padding: 0; margin: 0; min-width: 0;
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.calculator .field legend {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+  width: 100%;
+}
+.calculator .field-output {
+  font-weight: 500;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+.calculator input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-primary);
+}
+.calculator .range-ticks {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.calc-output {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-sage-light, color-mix(in oklab, var(--color-primary) 12%, var(--color-bg)));
+  border-radius: var(--radius-md, 12px);
+  align-self: start;
+}
+.calc-label {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary-active, var(--color-primary));
+}
+.calc-price {
+  display: flex; align-items: baseline; gap: 2px;
+  color: var(--color-primary-active, var(--color-primary));
+  font-family: var(--font-display);
+}
+.calc-currency { font-size: var(--text-lg); }
+.calc-amount { font-size: clamp(2.25rem, 8vw, 3rem); font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.calc-detail {
+  font-size: var(--text-sm);
+  color: color-mix(in oklab, var(--color-primary-active, var(--color-primary)) 75%, transparent);
+  margin: 0;
+}
+.calc-note {
+  font-size: var(--text-xs);
+  color: color-mix(in oklab, var(--color-primary-active, var(--color-primary)) 65%, transparent);
+  margin: var(--space-2) 0 0;
+}
+
+/* Calculator's chip-row: keep chips scrolling in a single row without cutting off */
+.calculator .chip-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.calculator .chip {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color var(--transition-interactive), color var(--transition-interactive), border-color var(--transition-interactive);
+}
+.calculator .chip[aria-checked="true"] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ============================================================
+   iPhone / mobile polish (≤ 720px)
+   ============================================================ */
+@media (max-width: 720px) {
+  /* Hero: buttons row should wrap cleanly and stay readable */
+  .hero-cinematic .hero-copy .btn-row,
+  .hero-cinematic .hero-copy .hero-actions,
+  .hero-cinematic .hero-copy > div:has(> .btn) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+  }
+  .hero-cinematic .btn.btn-lg {
+    width: 100%;
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-base);
+  }
+  /* Strengthen the hero scrim on mobile so buttons don't sit on white marble */
+  .hero-cinematic .hero-image-scrim {
+    background:
+      linear-gradient(180deg,
+        rgba(23, 52, 42, 0.72) 0%,
+        rgba(23, 52, 42, 0.55) 45%,
+        rgba(23, 52, 42, 0.35) 72%,
+        rgba(23, 52, 42, 0.55) 100%) !important;
+  }
+  /* Slightly larger logo on mobile so the wordmark reads */
+  .logo-image { height: 40px !important; }
+  .site-header.is-scrolled .logo-image { height: 36px !important; }
+
+  /* Filter chip rows: enable horizontal scroll with soft edge fade */
+  .chip-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding-inline: var(--space-4);
+    margin-inline: calc(var(--space-4) * -1);
+    padding-bottom: var(--space-2);
+    mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  }
+  .chip-row::-webkit-scrollbar { display: none; }
+  .chip-row .chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  /* Section vertical rhythm on mobile: tighten to prevent giant gaps */
+  section.section,
+  .section {
+    padding-top: clamp(3rem, 8vw, 5rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  /* Service cards: full-width, no cramped padding */
+  .service-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-4) !important;
+  }
+  .service-card {
+    padding: var(--space-5) !important;
+  }
+
+  /* Testimonials: single column, tighter */
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .testimonial {
+    padding: var(--space-5);
+  }
+
+  /* Hero copy: keep it inside safe margins */
+  .hero-cinematic .hero-copy {
+    padding-inline: var(--space-5);
+    max-width: 100%;
+  }
+  .hero-cinematic .hero-title {
+    font-size: clamp(2.25rem, 9vw, 3.25rem);
+    line-height: 1.05;
+  }
+  .hero-cinematic .hero-subtitle,
+  .hero-cinematic .hero-copy p {
+    font-size: var(--text-base);
+    max-width: 34ch;
+  }
+
+  /* Section headings: keep them from crashing into the edge */
+  .section-header,
+  .section > header {
+    padding-inline: var(--space-5);
+  }
+
+  /* Container safe-inset for iPhone Dynamic Island / notch */
+  .container,
+  .site-header,
+  .site-footer {
+    padding-left: max(var(--space-5), env(safe-area-inset-left));
+    padding-right: max(var(--space-5), env(safe-area-inset-right));
+  }
+
+  /* Project gallery: full-width images, no wasted margins */
+  .project-grid,
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-4) !important;
+  }
+
+  /* Videos section: cap width, no horizontal overflow */
+  .video-grid,
+  .videos-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-4) !important;
+  }
+  video, .video-player {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Pricing table: collapse to card list on mobile */
+  .pricing-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+  }
+  .pricing-row.pricing-head {
+    display: none;
+  }
+  .pricing-row strong {
+    font-size: var(--text-base);
+  }
+  .pricing-row .rate {
+    font-size: var(--text-base);
+  }
+
+  /* Quote calculator: stack input pane above result pane */
+  .calculator {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+  .calc-output {
+    padding: var(--space-4);
+  }
+
+  /* Prevent overall horizontal overflow */
+  html, body { overflow-x: hidden; }
+}
+
+/* ============================================================
+   Before / After comparison slider
+   ============================================================ */
+.ba-stage {
+  position: relative;
+  margin-top: var(--space-8);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ba-compare {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-offset);
+  box-shadow: var(--shadow-md);
+  user-select: none;
+  touch-action: none;
+  cursor: ew-resize;
+  --ba-pos: 50%;
+}
+
+.ba-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.ba-img.ba-after {
+  z-index: 1;
+}
+
+.ba-img.ba-before {
+  z-index: 2;
+  clip-path: inset(0 calc(100% - var(--ba-pos)) 0 0);
+}
+
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ba-pos, 50%);
+  width: 44px;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.ba-handle-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(29, 42, 37, 0.25);
+}
+
+.ba-handle-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.ba-label {
+  position: absolute;
+  top: var(--space-3);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(23, 52, 42, 0.72);
+  color: #fff;
+  border-radius: var(--radius-full);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.ba-label-before {
+  left: var(--space-3);
+}
+
+.ba-label-after {
+  right: var(--space-3);
+}
+
+.ba-caption {
+  margin-top: var(--space-4);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.ba-caption strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .ba-compare {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-md);
+  }
+  .ba-handle-knob {
+    width: 40px;
+    height: 40px;
+  }
+  .ba-label {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+}
+
+/* ============================================================
+   Extra-narrow phones (≤ 400px — covers iPhone SE / mini)
+   ============================================================ */
+@media (max-width: 400px) {
+  .hero-cinematic .hero-title {
+    font-size: clamp(2rem, 10vw, 2.5rem);
+  }
+  .service-card,
+  .testimonial {
+    padding: var(--space-4) !important;
+  }
+}
