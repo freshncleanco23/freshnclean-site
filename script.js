@@ -384,6 +384,17 @@ let dragging = false;
 let touchActive = false; // when true, ignore pointer events (touch is authoritative on iOS)
 let rafId = 0;
 let pendingX = null;
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const setGrabbed = (on) => {
+baHandle.classList.toggle('is-active', !!on);
+};
+let hapticFired = false;
+const fireHaptic = () => {
+if (hapticFired) return;
+hapticFired = true;
+if (prefersReducedMotion) return;
+try { if (navigator.vibrate) navigator.vibrate(10); } catch(_) {}
+};
 const applyPending = () => {
 rafId = 0;
 if (pendingX == null) return;
@@ -400,6 +411,8 @@ if (!rafId) rafId = requestAnimationFrame(applyPending);
 const onDown = (e) => {
 if (touchActive) return;
 dragging = true;
+setGrabbed(true);
+fireHaptic();
 try { baHandle.setPointerCapture && e.pointerId != null && baHandle.setPointerCapture(e.pointerId); } catch(_) {}
 scheduleFromX(e.clientX);
 if (e.cancelable) e.preventDefault();
@@ -409,7 +422,13 @@ if (!dragging || touchActive) return;
 scheduleFromX(e.clientX);
 if (e.cancelable) e.preventDefault();
 };
-const onUp = () => { if (!touchActive) dragging = false; };
+const onUp = () => {
+if (!touchActive) {
+dragging = false;
+setGrabbed(false);
+hapticFired = false;
+}
+};
 baHandle.addEventListener('pointerdown', onDown);
 window.addEventListener('pointermove', onMove, { passive: false });
 window.addEventListener('pointerup', onUp);
@@ -429,6 +448,8 @@ return t ? t.clientX : 0;
 const onTouchStart = (e) => {
 touchActive = true;
 dragging = true;
+setGrabbed(true);
+fireHaptic();
 scheduleFromX(getTouchX(e));
 if (e.cancelable) e.preventDefault();
 };
@@ -439,6 +460,8 @@ if (e.cancelable) e.preventDefault();
 };
 const onTouchEnd = () => {
 dragging = false;
+setGrabbed(false);
+hapticFired = false;
 // Release touchActive on the next frame so trailing synthetic pointer events
 // (which fire after touchend on iOS) don't reset the position.
 setTimeout(() => { touchActive = false; }, 300);
@@ -451,6 +474,8 @@ baCompare.addEventListener('touchstart', (e) => {
 if (e.target === baHandle || baHandle.contains(e.target)) return;
 touchActive = true;
 dragging = true;
+setGrabbed(true);
+fireHaptic();
 scheduleFromX(getTouchX(e));
 if (e.cancelable) e.preventDefault();
 }, { passive: false });

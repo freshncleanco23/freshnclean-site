@@ -684,6 +684,28 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-md);
+  transition: transform 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms ease-out;
+}
+
+.ba-handle.is-active .ba-handle-knob {
+  transform: translate(-50%, -50%) scale(1.14);
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.35),
+    0 0 0 10px rgba(46, 91, 74, 0.28),
+    var(--shadow-lg);
+}
+
+.ba-handle.is-active .ba-handle-line {
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(29, 42, 37, 0.45), 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ba-handle-knob { transition: none; }
+  .ba-handle.is-active .ba-handle-knob {
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 4px rgba(46, 91, 74, 0.35), var(--shadow-md);
+  }
 }
 
 .ba-label {
