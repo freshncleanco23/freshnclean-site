@@ -386,27 +386,57 @@ const rect = baCompare.getBoundingClientRect();
 const pct = ((clientX - rect.left) / rect.width) * 100;
 setBaPos(pct);
 };
+// Pointer events (desktop, modern browsers)
 const onDown = (e) => {
 dragging = true;
-baHandle.setPointerCapture && e.pointerId != null && baHandle.setPointerCapture(e.pointerId);
+try { baHandle.setPointerCapture && e.pointerId != null && baHandle.setPointerCapture(e.pointerId); } catch(_) {}
 setFromClientX(e.clientX);
-e.preventDefault();
+if (e.cancelable) e.preventDefault();
 };
 const onMove = (e) => {
 if (!dragging) return;
 setFromClientX(e.clientX);
+if (e.cancelable) e.preventDefault();
 };
-const onUp = () => {
-dragging = false;
-};
+const onUp = () => { dragging = false; };
 baHandle.addEventListener('pointerdown', onDown);
-window.addEventListener('pointermove', onMove);
+window.addEventListener('pointermove', onMove, { passive: false });
 window.addEventListener('pointerup', onUp);
 window.addEventListener('pointercancel', onUp);
 baCompare.addEventListener('pointerdown', (e) => {
 if (e.target === baHandle || baHandle.contains(e.target)) return;
 setFromClientX(e.clientX);
 });
+// Explicit touch fallback for iOS Safari — pointer events are unreliable on iOS
+// when a touch inside a scrollable region needs to be captured for horizontal drag.
+const getTouchX = (e) => {
+const t = e.touches && e.touches[0] ? e.touches[0] : (e.changedTouches && e.changedTouches[0]);
+return t ? t.clientX : 0;
+};
+const onTouchStart = (e) => {
+dragging = true;
+setFromClientX(getTouchX(e));
+if (e.cancelable) e.preventDefault();
+};
+const onTouchMove = (e) => {
+if (!dragging) return;
+setFromClientX(getTouchX(e));
+if (e.cancelable) e.preventDefault();
+};
+const onTouchEnd = () => { dragging = false; };
+baHandle.addEventListener('touchstart', onTouchStart, { passive: false });
+baHandle.addEventListener('touchmove', onTouchMove, { passive: false });
+baHandle.addEventListener('touchend', onTouchEnd);
+baHandle.addEventListener('touchcancel', onTouchEnd);
+baCompare.addEventListener('touchstart', (e) => {
+if (e.target === baHandle || baHandle.contains(e.target)) return;
+dragging = true;
+setFromClientX(getTouchX(e));
+if (e.cancelable) e.preventDefault();
+}, { passive: false });
+baCompare.addEventListener('touchmove', onTouchMove, { passive: false });
+baCompare.addEventListener('touchend', onTouchEnd);
+baCompare.addEventListener('touchcancel', onTouchEnd);
 baHandle.addEventListener('keydown', (e) => {
 const current = parseFloat(
 getComputedStyle(baCompare).getPropertyValue('--ba-pos'),
